@@ -2,7 +2,13 @@
 #include <TFT_eSPI.h>
 #include <ui.h>
 
-/*Don't forget to set Sketchbook location in File/Preferences to the path of your UI project (the parent foder of this INO file)*/
+//Defining the Potentiometer Pins
+#define POTPIN1 12
+#define POTPIN2 13
+
+//Don't forget to set Sketchbook location in File/Preferences to the path of your UI project (the parent foder of this INO file)
+
+//Defining the objects
 extern lv_obj_t *ui_TempArc;
 extern lv_obj_t *ui_VoltageArc;
 extern lv_obj_t *ui_Temp_Value;
@@ -113,11 +119,11 @@ void setup()
 void loop()
 {
   // Temp Value input
-  int potValue1 = analogRead(15);
+  int potValue1 = analogRead(POTPIN1);
   int tempValue = map(potValue1, 0, 4095, 0, 100);
   Serial.println(tempValue);
   // Voltage value input
-  float potValue2 = analogRead(2);
+  float potValue2 = analogRead(POTPIN2);
   float voltageValue = potValue2/163.8;
   Serial.println(voltageValue);
 
