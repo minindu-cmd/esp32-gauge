@@ -1,6 +1,6 @@
 # ESP32 Vehicle Gauge with GC9A01 TFT Display using LVGL
 
-This project uses an ESP32 microcontroller to create a vehicle gauge for measuring battery voltage and engine temperature, displaying the information on a GC9A01 TFT display using the LVGL library.
+This project uses an ESP32 microcontroller to create a vehicle gauge and displaying the information on a GC9A01 TFT display using the LVGL library.
 
 ## Components Required
 
