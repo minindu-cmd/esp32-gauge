@@ -2,17 +2,7 @@
 #include <TFT_eSPI.h>
 #include <ui.h>
 
-//Defining the Potentiometer Pins
-#define POTPIN1 12
-#define POTPIN2 13
-
-//Don't forget to set Sketchbook location in File/Preferences to the path of your UI project (the parent foder of this INO file)
-
-//Defining the objects
-extern lv_obj_t *ui_TempArc;
-extern lv_obj_t *ui_VoltageArc;
-extern lv_obj_t *ui_Temp_Value;
-extern lv_obj_t *ui_Voltage_Value;
+/*Don't forget to set Sketchbook location in File/Preferences to the path of your UI project (the parent foder of this INO file)*/
 
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = 240;
@@ -118,19 +108,6 @@ void setup()
 
 void loop()
 {
-  // Temp Value input
-  int potValue1 = analogRead(POTPIN1);
-  int tempValue = map(potValue1, 0, 4095, 0, 100);
-  Serial.println(tempValue);
-  // Voltage value input
-  float potValue2 = analogRead(POTPIN2);
-  float voltageValue = potValue2/163.8;
-  Serial.println(voltageValue);
-
-  lv_arc_set_value(ui_VoltageArc, voltageValue);
-  lv_label_set_text_fmt(ui_Voltage_Value, "%.1f", voltageValue);
-  lv_arc_set_value(ui_TempArc, tempValue);
-  lv_label_set_text_fmt(ui_Temp_Value, "%d", tempValue);
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
 }
