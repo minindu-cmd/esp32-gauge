@@ -2,8 +2,10 @@
 #include <TFT_eSPI.h>
 #include <ui.h>
 
-// defining Potentiometer Pins
-#define POTPIN 15
+// defining variables
+#define POT_PIN 15         // Potentiometer Pins
+#define MAX_POT_VALUE 4095 // Maximum Value the Potentiometer can get
+#define TANK_CAPACITY 6
 
 // defining classes for ui value specification
 extern lv_obj_t *ui_fuelLevelValue;
@@ -115,12 +117,16 @@ void setup()
 void loop()
 {
   // Fuel Level Value input
-  int potValue = analogRead(POTPIN);
-  int fuelValue = map(potValue, 0, 4095, 0, 100);
-  Serial.println(fuelValue);
+  float potValue = analogRead(POT_PIN);
+  float scaledPotValueMax = MAX_POT_VALUE / 1000;
+  float scaledPotValue = potValue / 1000;
+  int fuelValue = map(potValue, 0, MAX_POT_VALUE, 0, 100);
+  float remainingValue = map(scaledPotValue, 0, scaledPotValueMax, 0, TANK_CAPACITY);
+  Serial.printf("Fuel Value: %dL\n", fuelValue);
+  Serial.printf("Remaining Value: %.2f\n", remainingValue);
 
   lv_arc_set_value(ui_fuelLevelValue, fuelValue);
-  // lv_label_set_text_fmt(ui_Voltage_Value, "%.1f", voltageValue);
+  lv_label_set_text_fmt(ui_remainingValue, "%.2f", remainingValue);
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
