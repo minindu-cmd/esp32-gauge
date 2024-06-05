@@ -148,8 +148,8 @@ void loop()
   // Battery Level Set
   lv_bar_set_value(ui_batteryLevelBarValue, batteryLevel, LV_ANIM_OFF);
 
-  // Last filled day Set
   lv_label_set_text(ui_lastFilledValue, "2 days ago");
+
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
