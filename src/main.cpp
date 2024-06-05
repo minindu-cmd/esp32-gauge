@@ -71,6 +71,14 @@ void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data)
   }
 }
 
+// Defining a new function to map floating values
+float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
+{
+  float val = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  val = constrain(val, 0, TANK_CAPACITY);
+  return val;
+}
+
 void setup()
 {
   Serial.begin(115200); /* prepare for possible serial debug */
@@ -121,12 +129,15 @@ void loop()
   float scaledPotValueMax = MAX_POT_VALUE / 1000;
   float scaledPotValue = potValue / 1000;
   int fuelValue = map(potValue, 0, MAX_POT_VALUE, 0, 100);
-  float remainingValue = map(scaledPotValue, 0, scaledPotValueMax, 0, TANK_CAPACITY);
-  Serial.printf("Fuel Value: %dL\n", fuelValue);
+  float remainingValue = mapfloat(scaledPotValue, 0.00, scaledPotValueMax, 0.00, TANK_CAPACITY);
+
+  // Serial.printf("Fuel Value: %dL\n", fuelValue);
+  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
   Serial.printf("Remaining Value: %.2f\n", remainingValue);
 
   lv_arc_set_value(ui_fuelLevelValue, fuelValue);
-  lv_label_set_text_fmt(ui_remainingValue, "%.2f", remainingValue);
+  lv_label_set_text_fmt(ui_remainingValue, "%.2fL", remainingValue);
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
