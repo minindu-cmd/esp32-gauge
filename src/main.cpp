@@ -2,17 +2,15 @@
 #include <TFT_eSPI.h>
 #include <ui.h>
 
-//Defining the Potentiometer Pins
-#define POTPIN1 12
-#define POTPIN2 13
+// defining variables
+#define POT_PIN 15         // Potentiometer Pins
+#define MAX_POT_VALUE 4095 // Maximum Value the Potentiometer can get
+#define TANK_CAPACITY 6
 
-//Don't forget to set Sketchbook location in File/Preferences to the path of your UI project (the parent foder of this INO file)
-
-//Defining the objects
-extern lv_obj_t *ui_TempArc;
-extern lv_obj_t *ui_VoltageArc;
-extern lv_obj_t *ui_Temp_Value;
-extern lv_obj_t *ui_Voltage_Value;
+// defining classes for ui value specification
+extern lv_obj_t *ui_fuelLevelValue;
+extern lv_obj_t *ui_batteryLevelValue;
+extern lv_obj_t *ui_batteryLevelBarValue;
 
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = 240;
@@ -73,6 +71,14 @@ void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data)
   }
 }
 
+// Defining a new function to map floating values
+float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
+{
+  float val = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  val = constrain(val, 0, TANK_CAPACITY);
+  return val;
+}
+
 void setup()
 {
   Serial.begin(115200); /* prepare for possible serial debug */
@@ -118,19 +124,29 @@ void setup()
 
 void loop()
 {
-  // Temp Value input
-  int potValue1 = analogRead(POTPIN1);
-  int tempValue = map(potValue1, 0, 4095, 0, 100);
-  Serial.println(tempValue);
-  // Voltage value input
-  float potValue2 = analogRead(POTPIN2);
-  float voltageValue = potValue2/163.8;
-  Serial.println(voltageValue);
+  // Battery Level initialize
+  int batteryLevel = 69;
 
-  lv_arc_set_value(ui_VoltageArc, voltageValue);
-  lv_label_set_text_fmt(ui_Voltage_Value, "%.1f", voltageValue);
-  lv_arc_set_value(ui_TempArc, tempValue);
-  lv_label_set_text_fmt(ui_Temp_Value, "%d", tempValue);
+  // Fuel Level Value input
+  float potValue = analogRead(POT_PIN);
+  float scaledPotValueMax = MAX_POT_VALUE / 1000;
+  float scaledPotValue = potValue / 1000;
+  int fuelValue = map(potValue, 0, MAX_POT_VALUE, 0, 100);
+  float remainingValue = mapfloat(scaledPotValue, 0.00, scaledPotValueMax, 0.00, TANK_CAPACITY);
+
+  // Serial.printf("Fuel Value: %dL\n", fuelValue);
+  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  // Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
+  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  // Arc Level Set
+  lv_arc_set_value(ui_fuelLevelValue, fuelValue);
+
+  // Remaining Value Set
+  lv_label_set_text_fmt(ui_remainingValue, "%.2f L", remainingValue);
+
+  // Battery Level Set
+  lv_bar_set_value(ui_batteryLevelBarValue, batteryLevel, LV_ANIM_OFF);
+
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
 }
