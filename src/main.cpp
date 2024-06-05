@@ -11,6 +11,7 @@
 extern lv_obj_t *ui_fuelLevelValue;
 extern lv_obj_t *ui_batteryLevelValue;
 extern lv_obj_t *ui_batteryLevelBarValue;
+extern lv_obj_t *ui_lastFilledValue;
 
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = 240;
@@ -146,6 +147,9 @@ void loop()
 
   // Battery Level Set
   lv_bar_set_value(ui_batteryLevelBarValue, batteryLevel, LV_ANIM_OFF);
+
+  lv_label_set_text(ui_lastFilledValue, "2 days ago");
+
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);

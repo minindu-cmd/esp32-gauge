@@ -136,7 +136,7 @@ lv_obj_set_height( ui_Last_Filled, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_Last_Filled, -46 );
 lv_obj_set_y( ui_Last_Filled, 23 );
 lv_obj_set_align( ui_Last_Filled, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Last_Filled,"LAST FILLED ON");
+lv_label_set_text(ui_Last_Filled,"LAST FILLED");
 lv_obj_set_style_text_letter_space(ui_Last_Filled, 1, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_line_space(ui_Last_Filled, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_Last_Filled, &ui_font_Font_16, LV_PART_MAIN| LV_STATE_DEFAULT);
