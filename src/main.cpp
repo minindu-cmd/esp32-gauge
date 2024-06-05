@@ -2,7 +2,13 @@
 #include <TFT_eSPI.h>
 #include <ui.h>
 
-/*Don't forget to set Sketchbook location in File/Preferences to the path of your UI project (the parent foder of this INO file)*/
+// defining Potentiometer Pins
+#define POTPIN 15
+
+// defining classes for ui value specification
+extern lv_obj_t *ui_fuelLevelValue;
+extern lv_obj_t *ui_batteryLevelValue;
+extern lv_obj_t *ui_batteryLevelBarValue;
 
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = 240;
@@ -108,6 +114,14 @@ void setup()
 
 void loop()
 {
+  // Fuel Level Value input
+  int potValue = analogRead(POTPIN);
+  int fuelValue = map(potValue, 0, 4095, 0, 100);
+  Serial.println(fuelValue);
+
+  lv_arc_set_value(ui_fuelLevelValue, fuelValue);
+  // lv_label_set_text_fmt(ui_Voltage_Value, "%.1f", voltageValue);
+
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
 }
