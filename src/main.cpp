@@ -6,12 +6,13 @@
 #define POT_PIN 15         // Potentiometer Pins
 #define MAX_POT_VALUE 4095 // Maximum Value the Potentiometer can get
 #define TANK_CAPACITY 6
+#define BUTTON_PIN 2
 
 // defining classes for ui value specification
 extern lv_obj_t *ui_fuelLevelValue;
 extern lv_obj_t *ui_batteryLevelValue;
 extern lv_obj_t *ui_batteryLevelBarValue;
-extern lv_obj_t *ui_lastFilledValue;
+extern lv_obj_t *ui_Charing_ON;
 
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = 240;
@@ -83,7 +84,7 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
 void setup()
 {
   Serial.begin(115200); /* prepare for possible serial debug */
-
+  pinMode(BUTTON_PIN, INPUT);
   String LVGL_Arduino = "Hello Arduino! ";
   LVGL_Arduino += String('V') + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
 
@@ -97,7 +98,7 @@ void setup()
 #endif
 
   tft.begin();        /* TFT init */
-  tft.setRotation(3); /* Landscape orientation, flipped */
+  tft.setRotation(2); /* Landscape orientation, flipped */
 
   lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * screenHeight / 10);
 
@@ -125,8 +126,7 @@ void setup()
 
 void loop()
 {
-  // Battery Level initialize
-  int batteryLevel = 69;
+  int batteryLevel = 69; // Battery Level initialize
 
   // Fuel Level Value input
   float potValue = analogRead(POT_PIN);
@@ -135,10 +135,15 @@ void loop()
   int fuelValue = map(potValue, 0, MAX_POT_VALUE, 0, 100);
   float remainingValue = mapfloat(scaledPotValue, 0.00, scaledPotValueMax, 0.00, TANK_CAPACITY);
 
-  // Serial.printf("Fuel Value: %dL\n", fuelValue);
-  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
-  // Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
-  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  /*
+  For Testing Purposes
+
+    Serial.printf("Fuel Value: %dL\n", fuelValue);
+    Serial.printf("Remaining Value: %.2f\n", remainingValue);
+    Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
+    Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  */
+
   // Arc Level Set
   lv_arc_set_value(ui_fuelLevelValue, fuelValue);
 
@@ -148,8 +153,20 @@ void loop()
   // Battery Level Set
   lv_bar_set_value(ui_batteryLevelBarValue, batteryLevel, LV_ANIM_OFF);
 
-  lv_label_set_text(ui_lastFilledValue, "2 days ago");
+  // Battery Level Text Set
+  lv_label_set_text_fmt(ui_batteryLevelValue, "%d%", batteryLevel);
 
+  // chargingState ON/OFF Set
+  int chargingState = digitalRead(BUTTON_PIN); // Battery chargingState
+  Serial.printf("State: %d\n", chargingState);
+  if (chargingState == HIGH)
+  {
+    lv_obj_set_style_opa(ui_Charing_ON, LV_OPA_100, 0);
+  }
+  else
+  {
+    lv_obj_set_style_opa(ui_Charing_ON, LV_OPA_0, 0);
+  }
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);

@@ -39,10 +39,8 @@ extern lv_obj_t *ui_Charing_ON;
 extern lv_obj_t *ui_fuelLevelValue;
 extern lv_obj_t *ui_batteryLevelBarValue;
 extern lv_obj_t *ui_batteryLevelValue;
-extern lv_obj_t *ui_Last_Filled;
 extern lv_obj_t *ui_Remaining;
 extern lv_obj_t *ui_Image1;
-extern lv_obj_t *ui_lastFilledValue;
 extern lv_obj_t *ui_remainingValue;
 void ui_event____initial_actions0( lv_event_t * e);
 extern lv_obj_t *ui____initial_actions0;
@@ -60,6 +58,7 @@ LV_FONT_DECLARE( ui_font_Font_14);
 LV_FONT_DECLARE( ui_font_Font_16);
 LV_FONT_DECLARE( ui_font_Font_18);
 LV_FONT_DECLARE( ui_font_Font_24);
+LV_FONT_DECLARE( ui_font_Font_22);
 
 
 void ui_init(void);
