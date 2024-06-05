@@ -12,7 +12,6 @@
 extern lv_obj_t *ui_fuelLevelValue;
 extern lv_obj_t *ui_batteryLevelValue;
 extern lv_obj_t *ui_batteryLevelBarValue;
-extern lv_obj_t *ui_lastFilledValue;
 extern lv_obj_t *ui_Charing_ON;
 
 /*Change to your screen resolution*/
@@ -156,9 +155,6 @@ void loop()
 
   // Battery Level Text Set
   lv_label_set_text_fmt(ui_batteryLevelValue, "%d%", batteryLevel);
-
-  // Last Filled Set
-  lv_label_set_text(ui_lastFilledValue, "2 days ago");
 
   // chargingState ON/OFF Set
   int chargingState = digitalRead(BUTTON_PIN); // Battery chargingState
