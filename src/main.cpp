@@ -135,10 +135,15 @@ void loop()
   int fuelValue = map(potValue, 0, MAX_POT_VALUE, 0, 100);
   float remainingValue = mapfloat(scaledPotValue, 0.00, scaledPotValueMax, 0.00, TANK_CAPACITY);
 
-  // Serial.printf("Fuel Value: %dL\n", fuelValue);
-  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
-  // Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
-  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  /*
+  For Testing Purposes
+
+    Serial.printf("Fuel Value: %dL\n", fuelValue);
+    Serial.printf("Remaining Value: %.2f\n", remainingValue);
+    Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
+    Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  */
+
   // Arc Level Set
   lv_arc_set_value(ui_fuelLevelValue, fuelValue);
 
@@ -148,8 +153,11 @@ void loop()
   // Battery Level Set
   lv_bar_set_value(ui_batteryLevelBarValue, batteryLevel, LV_ANIM_OFF);
 
-  lv_label_set_text(ui_lastFilledValue, "2 days ago");
+  // Battery Level Text Set
+  lv_label_set_text_fmt(ui_batteryLevelValue, "%d%", batteryLevel);
 
+  // Last Filled Set
+  lv_label_set_text(ui_lastFilledValue, "2 days ago");
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
