@@ -124,6 +124,9 @@ void setup()
 
 void loop()
 {
+  // Battery Level initialize
+  int batteryLevel = 69;
+
   // Fuel Level Value input
   float potValue = analogRead(POT_PIN);
   float scaledPotValueMax = MAX_POT_VALUE / 1000;
@@ -133,11 +136,16 @@ void loop()
 
   // Serial.printf("Fuel Value: %dL\n", fuelValue);
   // Serial.printf("Remaining Value: %.2f\n", remainingValue);
-  Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
-  Serial.printf("Remaining Value: %.2f\n", remainingValue);
-
+  // Serial.printf("Scaled Pot Value: %.2f\n", scaledPotValue);
+  // Serial.printf("Remaining Value: %.2f\n", remainingValue);
+  // Arc Level Set
   lv_arc_set_value(ui_fuelLevelValue, fuelValue);
-  lv_label_set_text_fmt(ui_remainingValue, "%.2fL", remainingValue);
+
+  // Remaining Value Set
+  lv_label_set_text_fmt(ui_remainingValue, "%.2f L", remainingValue);
+
+  // Battery Level Set
+  lv_bar_set_value(ui_batteryLevelBarValue, batteryLevel, LV_ANIM_OFF);
 
   lv_timer_handler(); /* let the GUI do its work */
   delay(5);
